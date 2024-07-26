@@ -75,7 +75,7 @@ function Update-NexusNugetHostedRepository {
     end {
         $urislug = "/service/rest/v1/repositories/nuget/hosted/$Name"
 
-        $Body = Get-NexusNugetRepository -Name $Name -Type hosted -ErrorAction 'Stop' | Select-Object -Property * -ExcludeProperty format, type | Convert-ObjectToHashtable
+        $Body = Get-NexusRepositorySettings -Format nuget -Name $Name -Type hosted -ErrorAction 'Stop' | Select-Object -Property * -ExcludeProperty format, type | Convert-ObjectToHashtable
 
         $Modified = $false
         switch -Wildcard ($PSBoundParameters.Keys) {

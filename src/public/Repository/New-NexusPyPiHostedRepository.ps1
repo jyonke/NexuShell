@@ -18,11 +18,7 @@ function New-NexusPyPiHostedRepository {
     .PARAMETER BlobStoreName
     Blob store to use to store PyPi packages
     
-<<<<<<< HEAD
     .PARAMETER UseStrictContentTypeValidation
-=======
-    .PARAMETER StrictContentValidation
->>>>>>> 453cfe2f0cd797dbf728c8aeebfde338b150e6c0
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
     
     .PARAMETER DeploymentPolicy

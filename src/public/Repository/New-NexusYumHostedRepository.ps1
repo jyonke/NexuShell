@@ -18,7 +18,7 @@ function New-NexusYumHostedRepository {
     .PARAMETER BlobStoreName
     Blob store to use to store R packages
     
-    .PARAMETER UseStrictContentValidation
+    .PARAMETER UseStrictContentTypeValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
     
     .PARAMETER DeploymentPolicy
@@ -42,7 +42,7 @@ function New-NexusYumHostedRepository {
         Name = 'MyYumRepo'
         CleanupPolicy = '90 Days'
         DeploymentPolicy = 'Allow'
-        UseStrictContentValidation = $true
+        UseStrictContentTypeValidation = $true
         RepoDataDepth = 3
     }
     
@@ -69,8 +69,9 @@ function New-NexusYumHostedRepository {
         $BlobStoreName = 'default',
 
         [Parameter()]
+        [Alias('StrictContentValidation')]
         [Switch]
-        $UseStrictContentValidation,
+        $UseStrictContentTypeValidation,
 
         [Parameter()]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
@@ -108,7 +109,7 @@ function New-NexusYumHostedRepository {
             online  = [bool]$Online
             storage = @{
                 blobStoreName               = $BlobStoreName
-                strictContentTypeValidation = [bool]$UseStrictContentValidation
+                strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
                 writePolicy                 = $DeploymentPolicy
             }
             cleanup = @{

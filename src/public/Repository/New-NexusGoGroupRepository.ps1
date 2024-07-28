@@ -15,7 +15,7 @@ function New-NexusGoGroupRepository {
     .PARAMETER BlobStoreName
     Blob store to use to store Go packages
     
-    .PARAMETER UseStrictContentValidation
+    .PARAMETER UseStrictContentTypeValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
     
     .PARAMETER GroupMembers
@@ -45,6 +45,7 @@ function New-NexusGoGroupRepository {
         $BlobStoreName = 'default',
 
         [Parameter()]
+        [Alias('StrictContentValidation')]
         [Switch]
         $UseStrictContentTypeValidation
     )
@@ -66,10 +67,10 @@ function New-NexusGoGroupRepository {
             online  = [bool]$Online
             storage = @{
                 blobStoreName               = $BlobStoreName
-                strictContentTypeValidation = [bool]$UseStrictContentValidation
+                strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
             }
             group   = @{
-                memberNames = $GroupMembers
+                memberNames    = $GroupMembers
                 writableMember = $WritableMember
             }
         }

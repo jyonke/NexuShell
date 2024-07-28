@@ -36,7 +36,7 @@ Mark the repository as Online. Defaults to True
 .PARAMETER BlobStoreName
 The back-end blob store in which to store cached packages
 
-.PARAMETER UseStrictContentValidation
+.PARAMETER UseStrictContentTypeValidation
 Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
 
 .PARAMETER DeploymentPolicy
@@ -105,195 +105,197 @@ $ProxyParameters = @{
 
 New-NexusConanProxyRepository @ProxyParameters
 #>
-[CmdletBinding(HelpUri = 'https://nexushell.dev/New-NexusConanProxyRepository/',DefaultParameterSetname="Default")]
-Param(
-    [Parameter(Mandatory)]
-    [String]
-    $Name,
+    [CmdletBinding(HelpUri = 'https://nexushell.dev/New-NexusConanProxyRepository/', DefaultParameterSetname = "Default")]
+    Param(
+        [Parameter(Mandatory)]
+        [String]
+        $Name,
 
-    [Parameter(Mandatory)]
-    [String]
-    $ProxyRemoteUrl,
+        [Parameter(Mandatory)]
+        [String]
+        $ProxyRemoteUrl,
 
-    [Parameter()]
-    [String]
-    $ContentMaxAgeMinutes = '1440',
+        [Parameter()]
+        [String]
+        $ContentMaxAgeMinutes = '1440',
 
-    [Parameter()]
-    [String]
-    $MetadataMaxAgeMinutes = '1440',
+        [Parameter()]
+        [String]
+        $MetadataMaxAgeMinutes = '1440',
 
-    [Parameter()]
-    [Switch]
-    $UseNegativeCache,
+        [Parameter()]
+        [Switch]
+        $UseNegativeCache,
 
-    [Parameter()]
-    [String]
-    $NegativeCacheTTLMinutes = '1440',
+        [Parameter()]
+        [String]
+        $NegativeCacheTTLMinutes = '1440',
 
-    [Parameter()]
-    [String]
-    $CleanupPolicy,
+        [Parameter()]
+        [String]
+        $CleanupPolicy,
 
-    [Parameter()]
-    [String]
-    $RoutingRule,
+        [Parameter()]
+        [String]
+        $RoutingRule,
 
-    [Parameter()]
-    [Switch]
-    $Online = $true,
+        [Parameter()]
+        [Switch]
+        $Online = $true,
 
-    [Parameter()]
-    [String]
-    $BlobStoreName = 'default',
+        [Parameter()]
+        [String]
+        $BlobStoreName = 'default',
 
-    [Parameter()]
-    [Switch]
-    $UseStrictContentValidation= $true,
+        [Parameter()]
+        [Alias('StrictContentValidation')]
+        [Switch]
+        $UseStrictContentTypeValidation = $true,
 
-    [Parameter()]
-    [ValidateSet('Allow', 'Deny', 'Allow_Once')]
-    [String]
-    $DeploymentPolicy,
+        [Parameter()]
+        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
+        [String]
+        $DeploymentPolicy,
 
-    [Parameter()]
-    [Switch]
-    $UseNexusTrustStore = $false,
+        [Parameter()]
+        [Switch]
+        $UseNexusTrustStore = $false,
 
-    [Parameter(ParameterSetName = "Authentication")]
-    [Switch]
-    $UseAuthentication,
+        [Parameter(ParameterSetName = "Authentication")]
+        [Switch]
+        $UseAuthentication,
 
-    [Parameter(ParameterSetName = "Authentication", Mandatory)]
-    [ValidateSet('Username', 'NTLM')]
-    [String]
-    $AuthenticationType,
+        [Parameter(ParameterSetName = "Authentication", Mandatory)]
+        [ValidateSet('Username', 'NTLM')]
+        [String]
+        $AuthenticationType,
 
-    [Parameter(ParameterSetName = "Authentication", Mandatory)]
-    [System.Management.Automation.PSCredential]
-    $Credential,
+        [Parameter(ParameterSetName = "Authentication", Mandatory)]
+        [System.Management.Automation.PSCredential]
+        $Credential,
 
-    [Parameter(ParameterSetName = "Authentication")]
-    [String]
-    $HostnameFqdn,
+        [Parameter(ParameterSetName = "Authentication")]
+        [String]
+        $HostnameFqdn,
 
-    [Parameter(ParameterSetName = "Authentication")]
-    [String]
-    $DomainName,
+        [Parameter(ParameterSetName = "Authentication")]
+        [String]
+        $DomainName,
 
-    [Parameter()]
-    [Switch]
-    $BlockOutboundConnections = $false,
+        [Parameter()]
+        [Switch]
+        $BlockOutboundConnections = $false,
 
-    [Parameter()]
-    [Switch]
-    $EnableAutoBlocking = $false,
+        [Parameter()]
+        [Switch]
+        $EnableAutoBlocking = $false,
 
-    [Parameter()]
-    [ValidateRange(0,10)]
-    [String]
-    $ConnectionRetries,
+        [Parameter()]
+        [ValidateRange(0, 10)]
+        [String]
+        $ConnectionRetries,
 
-    [Parameter()]
-    [String]
-    $ConnectionTimeoutSeconds,
+        [Parameter()]
+        [String]
+        $ConnectionTimeoutSeconds,
 
-    [Parameter()]
-    [Switch]
-    $EnableCircularRedirects = $false,
+        [Parameter()]
+        [Switch]
+        $EnableCircularRedirects = $false,
 
-    [Parameter()]
-    [Switch]
-    $EnableCookies = $false,
+        [Parameter()]
+        [Switch]
+        $EnableCookies = $false,
 
-    [Parameter()]
-    [String]
-    $CustomUserAgent
-)
-begin {
+        [Parameter()]
+        [String]
+        $CustomUserAgent
+    )
+    begin {
 
-    if (-not $header) {
-        throw "Not connected to Nexus server! Run Connect-NexusServer first."
+        if (-not $header) {
+            throw "Not connected to Nexus server! Run Connect-NexusServer first."
+        }
+
+        $urislug = "/service/rest/v1/repositories/conan/proxy"
+
     }
+    process {
 
-    $urislug = "/service/rest/v1/repositories/conan/proxy"
-
-}
-process {
-
-    $body = @{
-        name          = $Name
-        online        = [bool]$Online
-        storage       = @{
-            blobStoreName               = $BlobStoreName
-            strictContentTypeValidation = [bool]$UseStrictContentValidation
-            writePolicy                 = $DeploymentPolicy
-        }
-        cleanup       = @{
-            policyNames = @($CleanupPolicy)
-        }
-        proxy         = @{
-            remoteUrl      = $ProxyRemoteUrl
-            contentMaxAge  = $ContentMaxAgeMinutes
-            metadataMaxAge = $MetadataMaxAgeMinutes
-        }
-        negativeCache = @{
-            enabled    = [bool]$UseNegativeCache
-            timeToLive = $NegativeCacheTTLMinutes
-        }
-        routingRule = $RoutingRule
-        httpClient    = @{
-            blocked    = [bool]$BlockOutboundConnections
-            autoBlock  = [bool]$EnableAutoBlocking
-            connection = @{
-                retries                 = $ConnectionRetries
-                userAgentSuffix         = $CustomUserAgent
-                timeout                 = $ConnectionTimeoutSeconds
-                enableCircularRedirects = [bool]$EnableCircularRedirects
-                enableCookies           = [bool]$EnableCookies
-                useTrustStore           = [bool]$UseNexusTrustStore
+        $body = @{
+            name          = $Name
+            online        = [bool]$Online
+            storage       = @{
+                blobStoreName               = $BlobStoreName
+                strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
+                writePolicy                 = $DeploymentPolicy
             }
-        }
-
-    }
-
-    if ($UseAuthentication) {
-        
-        switch($AuthenticationType){
-            'Username' {
-                $authentication = @{
-                    type       = $AuthenticationType.ToLower()
-                    username   = $Credential.UserName
-                    password   = $Credential.GetNetworkCredential().Password
-                    ntlmHost = ''
-                    ntlmDomain = ''
+            cleanup       = @{
+                policyNames = @($CleanupPolicy)
+            }
+            proxy         = @{
+                remoteUrl      = $ProxyRemoteUrl
+                contentMaxAge  = $ContentMaxAgeMinutes
+                metadataMaxAge = $MetadataMaxAgeMinutes
+            }
+            negativeCache = @{
+                enabled    = [bool]$UseNegativeCache
+                timeToLive = $NegativeCacheTTLMinutes
+            }
+            routingRule   = $RoutingRule
+            httpClient    = @{
+                blocked    = [bool]$BlockOutboundConnections
+                autoBlock  = [bool]$EnableAutoBlocking
+                connection = @{
+                    retries                 = $ConnectionRetries
+                    userAgentSuffix         = $CustomUserAgent
+                    timeout                 = $ConnectionTimeoutSeconds
+                    enableCircularRedirects = [bool]$EnableCircularRedirects
+                    enableCookies           = [bool]$EnableCookies
+                    useTrustStore           = [bool]$UseNexusTrustStore
                 }
-    
-                $body.httpClient.Add('authentication', $authentication)
             }
 
-            'NTLM' {
-                if(-not $HostnameFqdn -and $DomainName){
-                    throw "Parameter HostnameFqdn and DomainName are required when using WindowsNTLM authentication"
-                } else {
+        }
+
+        if ($UseAuthentication) {
+        
+            switch ($AuthenticationType) {
+                'Username' {
                     $authentication = @{
-                        type       = $AuthenticationType
+                        type       = $AuthenticationType.ToLower()
                         username   = $Credential.UserName
                         password   = $Credential.GetNetworkCredential().Password
-                        ntlmHost   = $HostnameFqdn
-                        ntlmDomain = $DomainName
+                        ntlmHost   = ''
+                        ntlmDomain = ''
                     }
+    
+                    $body.httpClient.Add('authentication', $authentication)
                 }
+
+                'NTLM' {
+                    if (-not $HostnameFqdn -and $DomainName) {
+                        throw "Parameter HostnameFqdn and DomainName are required when using WindowsNTLM authentication"
+                    }
+                    else {
+                        $authentication = @{
+                            type       = $AuthenticationType
+                            username   = $Credential.UserName
+                            password   = $Credential.GetNetworkCredential().Password
+                            ntlmHost   = $HostnameFqdn
+                            ntlmDomain = $DomainName
+                        }
+                    }
    
-                $body.httpClient.Add('authentication', $authentication)
+                    $body.httpClient.Add('authentication', $authentication)
+                }
             }
-        }
         
+        }
+
+        Write-Verbose $($Body | ConvertTo-Json)
+        Invoke-Nexus -UriSlug $urislug -Body $Body -Method POST
+
     }
-
-    Write-Verbose $($Body | ConvertTo-Json)
-    Invoke-Nexus -UriSlug $urislug -Body $Body -Method POST
-
-}
 
 }

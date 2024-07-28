@@ -21,7 +21,7 @@ function New-NexusAptHostedRepository {
     .PARAMETER BlobStore
     Blob store used to store repository contents
     
-    .PARAMETER UseStrictContentValidation
+    .PARAMETER UseStrictContentTypeValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
 
     .PARAMETER DeploymentPolicy
@@ -70,8 +70,9 @@ function New-NexusAptHostedRepository {
         $BlobStore = 'default',
 
         [Parameter()]
+        [Alias('StrictContentValidation')]
         [Switch]
-        $UseStrictContentValidation,
+        $UseStrictContentTypeValidation,
 
         [Parameter(Mandatory)]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
@@ -113,7 +114,7 @@ function New-NexusAptHostedRepository {
                 policyNames = @($CleanupPolicy )
             }
             storage    = @{
-                strictContentTypeValidation = [bool]$UseStrictContentValidation
+                strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
                 blobStoreName               = $BlobStore
                 writePolicy                 = $DeploymentPolicy.ToUpper()
             }

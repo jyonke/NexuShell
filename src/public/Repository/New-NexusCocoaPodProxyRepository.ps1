@@ -1,5 +1,5 @@
 function New-NexusCocoaPodProxyRepository {
-        <#
+    <#
     .SYNOPSIS
     Creates a new CocoaPod Proxy Repository
     
@@ -36,7 +36,7 @@ function New-NexusCocoaPodProxyRepository {
     .PARAMETER BlobStoreName
     The back-end blob store in which to store cached packages
     
-    .PARAMETER UseStrictContentValidation
+    .PARAMETER UseStrictContentTypeValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
     
     .PARAMETER DeploymentPolicy
@@ -105,7 +105,7 @@ function New-NexusCocoaPodProxyRepository {
     
     New-NexusCocoaPodProxyRepository @ProxyParameters
     #>
-    [CmdletBinding(HelpUri = 'https://nexushell.dev/New-NexusCocoaPodProxyRepository/',DefaultParameterSetname="Default")]
+    [CmdletBinding(HelpUri = 'https://nexushell.dev/New-NexusCocoaPodProxyRepository/', DefaultParameterSetname = "Default")]
     Param(
         [Parameter(Mandatory)]
         [String]
@@ -148,8 +148,9 @@ function New-NexusCocoaPodProxyRepository {
         $BlobStoreName = 'default',
 
         [Parameter()]
+        [Alias('StrictContentValidation')]
         [Switch]
-        $UseStrictContentValidation= $true,
+        $UseStrictContentTypeValidation = $true,
 
         [Parameter()]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
@@ -190,7 +191,7 @@ function New-NexusCocoaPodProxyRepository {
         $EnableAutoBlocking = $false,
 
         [Parameter()]
-        [ValidateRange(0,10)]
+        [ValidateRange(0, 10)]
         [String]
         $ConnectionRetries,
 
@@ -226,7 +227,7 @@ function New-NexusCocoaPodProxyRepository {
             online        = [bool]$Online
             storage       = @{
                 blobStoreName               = $BlobStoreName
-                strictContentTypeValidation = [bool]$UseStrictContentValidation
+                strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
                 writePolicy                 = $DeploymentPolicy
             }
             cleanup       = @{
@@ -241,7 +242,7 @@ function New-NexusCocoaPodProxyRepository {
                 enabled    = [bool]$UseNegativeCache
                 timeToLive = $NegativeCacheTTLMinutes
             }
-            routingRule = $RoutingRule
+            routingRule   = $RoutingRule
             httpClient    = @{
                 blocked    = [bool]$BlockOutboundConnections
                 autoBlock  = [bool]$EnableAutoBlocking
@@ -259,13 +260,13 @@ function New-NexusCocoaPodProxyRepository {
 
         if ($UseAuthentication) {
             
-            switch($AuthenticationType){
+            switch ($AuthenticationType) {
                 'Username' {
                     $authentication = @{
                         type       = $AuthenticationType.ToLower()
                         username   = $Credential.UserName
                         password   = $Credential.GetNetworkCredential().Password
-                        ntlmHost = ''
+                        ntlmHost   = ''
                         ntlmDomain = ''
                     }
         
@@ -273,9 +274,10 @@ function New-NexusCocoaPodProxyRepository {
                 }
 
                 'NTLM' {
-                    if(-not $HostnameFqdn -and $DomainName){
+                    if (-not $HostnameFqdn -and $DomainName) {
                         throw "Parameter HostnameFqdn and DomainName are required when using WindowsNTLM authentication"
-                    } else {
+                    }
+                    else {
                         $authentication = @{
                             type       = $AuthenticationType
                             username   = $Credential.UserName

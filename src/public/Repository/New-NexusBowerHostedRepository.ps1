@@ -18,7 +18,7 @@ function New-NexusBowerHostedRepository {
     .PARAMETER BlobStoreName
     Blob store to use to store Bower packages
     
-    .PARAMETER UseStrictContentValidation
+    .PARAMETER UseStrictContentTypeValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
     
     .PARAMETER DeploymentPolicy
@@ -36,7 +36,7 @@ function New-NexusBowerHostedRepository {
         Name = 'MyBowerRepo'
         CleanupPolicy = '90 Days'
         DeploymentPolicy = 'Allow'
-        UseStrictContentValidation = $true
+        UseStrictContentTypeValidation = $true
     }
     
     New-NexusBowerHostedRepository @RepoParams
@@ -65,8 +65,9 @@ function New-NexusBowerHostedRepository {
 
         [Parameter()]
         [ValidateSet('True', 'False')]
+        [Alias('StrictContentValidation')]
         [String]
-        $UseStrictContentValidation = 'True',
+        $UseStrictContentTypeValidation = 'True',
 
         [Parameter()]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
@@ -94,7 +95,7 @@ function New-NexusBowerHostedRepository {
             online  = $Online
             storage = @{
                 blobStoreName               = $BlobStoreName
-                strictContentTypeValidation = $UseStrictContentValidation
+                strictContentTypeValidation = $UseStrictContentTypeValidation
                 writePolicy                 = $DeploymentPolicy
             }
             cleanup = @{

@@ -15,7 +15,7 @@ function New-NexusDockerGroupRepository {
     .PARAMETER BlobStoreName
     Blob store to use to store Docker packages
     
-    .PARAMETER UseStrictContentValidation
+    .PARAMETER UseStrictContentTypeValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
     
     .PARAMETER EnableV1
@@ -58,6 +58,7 @@ function New-NexusDockerGroupRepository {
         $BlobStoreName = 'default',
 
         [Parameter()]
+        [Alias('StrictContentValidation')]
         [Switch]
         $UseStrictContentTypeValidation,
 
@@ -95,24 +96,24 @@ function New-NexusDockerGroupRepository {
             online  = [bool]$Online
             storage = @{
                 blobStoreName               = $BlobStoreName
-                strictContentTypeValidation = [bool]$UseStrictContentValidation
+                strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
             }
             group   = @{
-                memberNames = $GroupMembers
+                memberNames    = $GroupMembers
                 writableMember = $WritableMember
             }
-            docker = @{
-                v1Enabled = [bool]$EnableV1
+            docker  = @{
+                v1Enabled      = [bool]$EnableV1
                 forceBasicAuth = [bool]$ForceBasicAuth
-                httpPort = $HttpPort
-                httpsPort = $HttpsPort
+                httpPort       = $HttpPort
+                httpsPort      = $HttpsPort
             }
         }
 
         Write-Verbose $($Body | ConvertTo-Json)
         Invoke-Nexus -UriSlug $urislug -Body $Body -Method POST
 
-        if($ForceBasicAuth -eq $false){
+        if ($ForceBasicAuth -eq $false) {
             Write-Warning "Docker Bearer Token Realm required since -ForceBasicAuth was not passed."
             Write-Warning "Use Add-NexusRealm to enable if desired."
         }

@@ -15,7 +15,7 @@ function Update-NexusNugetGroupRepository {
     .PARAMETER BlobStoreName
     The name of the blob store to use
 
-    .PARAMETER UseStrictContentValidation
+    .PARAMETER UseStrictContentTypeValidation
     Indicates if strict content type validation should be enforced
 
     .NOTES
@@ -45,6 +45,7 @@ function Update-NexusNugetGroupRepository {
         $BlobStore,
 
         [Parameter()]
+        [Alias('StrictContentValidation')]
         [Switch]
         $UseStrictContentTypeValidation
     )
@@ -72,9 +73,9 @@ function Update-NexusNugetGroupRepository {
                     $Modified = $true
                 }
             }
-            "UseStrictContentValidation" {
-                if ($Body.storage.strictContentTypeValidation -ne ([bool]::Parse($UseStrictContentValidation))) {
-                    $Body.storage.strictContentTypeValidation = [bool]::Parse($UseStrictContentValidation)
+            "UseStrictContentTypeValidation" {
+                if ($Body.storage.strictContentTypeValidation -ne ([bool]::Parse($UseStrictContentTypeValidation))) {
+                    $Body.storage.strictContentTypeValidation = [bool]::Parse($UseStrictContentTypeValidation)
                     $Modified = $true
                 }
             }

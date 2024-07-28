@@ -18,7 +18,7 @@ function New-NexusMavenHostedRepository {
     .PARAMETER BlobStoreName
     Blob store to use to store Maven packages
     
-    .PARAMETER UseStrictContentValidation
+    .PARAMETER UseStrictContentTypeValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
     
     .PARAMETER DeploymentPolicy
@@ -45,7 +45,7 @@ function New-NexusMavenHostedRepository {
         Name = 'MyMavenRepo'
         CleanupPolicy = '90 Days'
         DeploymentPolicy = 'Allow'
-        UseStrictContentValidation = $true
+        UseStrictContentTypeValidation = $true
         VersionPolicy = 'Release'
         LayoutPolicy = 'Strict'
         ContentDisposition = 'Attachment'
@@ -76,8 +76,9 @@ function New-NexusMavenHostedRepository {
 
         [Parameter()]
         [ValidateSet('True', 'False')]
+        [Alias('StrictContentValidation')]
         [String]
-        $UseStrictContentValidation = 'True',
+        $UseStrictContentTypeValidation = 'True',
 
         [Parameter()]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
@@ -125,7 +126,7 @@ function New-NexusMavenHostedRepository {
             online  = [bool]$Online
             storage = @{
                 blobStoreName               = $BlobStoreName
-                strictContentTypeValidation = $UseStrictContentValidation
+                strictContentTypeValidation = $UseStrictContentTypeValidation
                 writePolicy                 = $DeploymentPolicy
             }
             cleanup = @{

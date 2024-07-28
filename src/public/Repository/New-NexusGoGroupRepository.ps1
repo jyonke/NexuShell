@@ -15,7 +15,7 @@ function New-NexusGoGroupRepository {
     .PARAMETER BlobStoreName
     Blob store to use to store Go packages
     
-    .PARAMETER StrictContentValidation
+    .PARAMETER UseStrictContentValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
     
     .PARAMETER GroupMembers

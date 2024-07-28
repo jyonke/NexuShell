@@ -36,7 +36,7 @@ function New-NexusCocoaPodProxyRepository {
     .PARAMETER BlobStoreName
     The back-end blob store in which to store cached packages
     
-    .PARAMETER StrictContentValidation
+    .PARAMETER UseStrictContentValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
     
     .PARAMETER DeploymentPolicy
@@ -149,7 +149,7 @@ function New-NexusCocoaPodProxyRepository {
 
         [Parameter()]
         [Switch]
-        $StrictContentValidation = $true,
+        $UseStrictContentValidation= $true,
 
         [Parameter()]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
@@ -226,7 +226,7 @@ function New-NexusCocoaPodProxyRepository {
             online        = [bool]$Online
             storage       = @{
                 blobStoreName               = $BlobStoreName
-                strictContentTypeValidation = [bool]$StrictContentValidation
+                strictContentTypeValidation = [bool]$UseStrictContentValidation
                 writePolicy                 = $DeploymentPolicy
             }
             cleanup       = @{

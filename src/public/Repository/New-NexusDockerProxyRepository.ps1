@@ -260,7 +260,7 @@ function New-NexusDockerProxyRepository {
             online        = [bool]$Online
             storage       = @{
                 blobStoreName               = $BlobStoreName
-                strictContentTypeValidation = [bool]$StrictContentValidation
+                strictContentTypeValidation = [bool]$UseStrictContentValidation
                 writePolicy                 = $DeploymentPolicy
             }
             cleanup       = @{

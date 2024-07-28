@@ -20,7 +20,7 @@ function New-NexusNugetHostedRepository {
     .PARAMETER BlobStoreName
     Blob store to use to store NuGet packages
     
-    .PARAMETER StrictContentValidation
+    .PARAMETER UseStrictContentValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
     
     .PARAMETER DeploymentPolicy

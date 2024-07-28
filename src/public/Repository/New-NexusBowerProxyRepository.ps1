@@ -39,7 +39,7 @@ function New-NexusBowerProxyRepository {
     .PARAMETER BlobStoreName
     The back-end blob store in which to store cached packages
     
-    .PARAMETER StrictContentValidation
+    .PARAMETER UseStrictContentValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
     
     .PARAMETER DeploymentPolicy
@@ -108,203 +108,204 @@ function New-NexusBowerProxyRepository {
     
     New-NexusBowerProxyRepository @ProxyParameters
     #>
-        [CmdletBinding(HelpUri = 'https://nexushell.dev/New-NexusBowerProxyRepository/',DefaultParameterSetname="Default")]
-        Param(
-            [Parameter(Mandatory)]
-            [String]
-            $Name,
+    [CmdletBinding(HelpUri = 'https://nexushell.dev/New-NexusBowerProxyRepository/', DefaultParameterSetname = "Default")]
+    Param(
+        [Parameter(Mandatory)]
+        [String]
+        $Name,
     
-            [Parameter(Mandatory)]
-            [String]
-            $ProxyRemoteUrl,
+        [Parameter(Mandatory)]
+        [String]
+        $ProxyRemoteUrl,
 
-            [Parameter()]
-            [Switch]
-            $RewritePackageUrls,
+        [Parameter()]
+        [Switch]
+        $RewritePackageUrls,
     
-            [Parameter()]
-            [String]
-            $ContentMaxAgeMinutes = '1440',
+        [Parameter()]
+        [String]
+        $ContentMaxAgeMinutes = '1440',
     
-            [Parameter()]
-            [String]
-            $MetadataMaxAgeMinutes = '1440',
+        [Parameter()]
+        [String]
+        $MetadataMaxAgeMinutes = '1440',
         
-            [Parameter()]
-            [Switch]
-            $UseNegativeCache,
+        [Parameter()]
+        [Switch]
+        $UseNegativeCache,
     
-            [Parameter()]
-            [String]
-            $NegativeCacheTTLMinutes = '1440',
+        [Parameter()]
+        [String]
+        $NegativeCacheTTLMinutes = '1440',
     
-            [Parameter()]
-            [String]
-            $CleanupPolicy,
+        [Parameter()]
+        [String]
+        $CleanupPolicy,
     
-            [Parameter()]
-            [String]
-            $RoutingRule,
+        [Parameter()]
+        [String]
+        $RoutingRule,
     
-            [Parameter()]
-            [Switch]
-            $Online = $true,
+        [Parameter()]
+        [Switch]
+        $Online = $true,
     
-            [Parameter()]
-            [String]
-            $BlobStoreName = 'default',
+        [Parameter()]
+        [String]
+        $BlobStoreName = 'default',
     
-            [Parameter()]
-            [Switch]
-            $StrictContentValidation = $true,
+        [Parameter()]
+        [Switch]
+        $UseStrictContentValidation = $true,
     
-            [Parameter()]
-            [ValidateSet('Allow', 'Deny', 'Allow_Once')]
-            [String]
-            $DeploymentPolicy,
+        [Parameter()]
+        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
+        [String]
+        $DeploymentPolicy,
     
-            [Parameter()]
-            [Switch]
-            $UseNexusTrustStore = $false,
+        [Parameter()]
+        [Switch]
+        $UseNexusTrustStore = $false,
     
-            [Parameter(ParameterSetName = "Authentication")]
-            [Switch]
-            $UseAuthentication,
+        [Parameter(ParameterSetName = "Authentication")]
+        [Switch]
+        $UseAuthentication,
     
-            [Parameter(ParameterSetName = "Authentication", Mandatory)]
-            [ValidateSet('Username', 'NTLM')]
-            [String]
-            $AuthenticationType,
+        [Parameter(ParameterSetName = "Authentication", Mandatory)]
+        [ValidateSet('Username', 'NTLM')]
+        [String]
+        $AuthenticationType,
     
-            [Parameter(ParameterSetName = "Authentication", Mandatory)]
-            [System.Management.Automation.PSCredential]
-            $Credential,
+        [Parameter(ParameterSetName = "Authentication", Mandatory)]
+        [System.Management.Automation.PSCredential]
+        $Credential,
     
-            [Parameter(ParameterSetName = "Authentication")]
-            [String]
-            $HostnameFqdn,
+        [Parameter(ParameterSetName = "Authentication")]
+        [String]
+        $HostnameFqdn,
     
-            [Parameter(ParameterSetName = "Authentication")]
-            [String]
-            $DomainName,
+        [Parameter(ParameterSetName = "Authentication")]
+        [String]
+        $DomainName,
     
-            [Parameter()]
-            [Switch]
-            $BlockOutboundConnections = $false,
+        [Parameter()]
+        [Switch]
+        $BlockOutboundConnections = $false,
     
-            [Parameter()]
-            [Switch]
-            $EnableAutoBlocking = $false,
+        [Parameter()]
+        [Switch]
+        $EnableAutoBlocking = $false,
     
-            [Parameter()]
-            [ValidateRange(0,10)]
-            [String]
-            $ConnectionRetries,
+        [Parameter()]
+        [ValidateRange(0, 10)]
+        [String]
+        $ConnectionRetries,
     
-            [Parameter()]
-            [String]
-            $ConnectionTimeoutSeconds,
+        [Parameter()]
+        [String]
+        $ConnectionTimeoutSeconds,
     
-            [Parameter()]
-            [Switch]
-            $EnableCircularRedirects = $false,
+        [Parameter()]
+        [Switch]
+        $EnableCircularRedirects = $false,
     
-            [Parameter()]
-            [Switch]
-            $EnableCookies = $false,
+        [Parameter()]
+        [Switch]
+        $EnableCookies = $false,
     
-            [Parameter()]
-            [String]
-            $CustomUserAgent
-        )
-        begin {
+        [Parameter()]
+        [String]
+        $CustomUserAgent
+    )
+    begin {
     
-            if (-not $header) {
-                throw "Not connected to Nexus server! Run Connect-NexusServer first."
-            }
-    
-            $urislug = "/service/rest/v1/repositories/bower/proxy"
-    
+        if (-not $header) {
+            throw "Not connected to Nexus server! Run Connect-NexusServer first."
         }
-        process {
-        
-            $body = @{
-                name          = $Name
-                online        = [bool]$Online
-                storage       = @{
-                    blobStoreName               = $BlobStoreName
-                    strictContentTypeValidation = [bool]$StrictContentValidation
-                    writePolicy                 = $DeploymentPolicy
-                }
-                cleanup       = @{
-                    policyNames = @($CleanupPolicy)
-                }
-                proxy         = @{
-                    remoteUrl      = $ProxyRemoteUrl
-                    contentMaxAge  = $ContentMaxAgeMinutes
-                    metadataMaxAge = $MetadataMaxAgeMinutes
-                }
     
-                negativeCache = @{
-                    enabled    = [bool]$UseNegativeCache
-                    timeToLive = $NegativeCacheTTLMinutes
-                }
-
-                bower = @{
-                    rewritePackageUrls = [bool]$RewritePackageUrls
-                }
+        $urislug = "/service/rest/v1/repositories/bower/proxy"
     
-                httpClient    = @{
-                    blocked    = [bool]$BlockOutboundConnections
-                    autoBlock  = [bool]$EnableAutoBlocking
-                    connection = @{
-                        retries                 = $ConnectionRetries
-                        userAgentSuffix         = $CustomUserAgent
-                        timeout                 = $ConnectionTimeoutSeconds
-                        enableCircularRedirects = [bool]$EnableCircularRedirects
-                        enableCookies           = [bool]$EnableCookies
-                        useTrustStore           = [bool]$UseNexusTrustStore
-                    }
-                }
+    }
+    process {
         
+        $body = @{
+            name          = $Name
+            online        = [bool]$Online
+            storage       = @{
+                blobStoreName               = $BlobStoreName
+                strictContentTypeValidation = [bool]$UseStrictContentValidation
+                writePolicy                 = $DeploymentPolicy
+            }
+            cleanup       = @{
+                policyNames = @($CleanupPolicy)
+            }
+            proxy         = @{
+                remoteUrl      = $ProxyRemoteUrl
+                contentMaxAge  = $ContentMaxAgeMinutes
+                metadataMaxAge = $MetadataMaxAgeMinutes
             }
     
-            if ($UseAuthentication) {
+            negativeCache = @{
+                enabled    = [bool]$UseNegativeCache
+                timeToLive = $NegativeCacheTTLMinutes
+            }
+
+            bower         = @{
+                rewritePackageUrls = [bool]$RewritePackageUrls
+            }
+    
+            httpClient    = @{
+                blocked    = [bool]$BlockOutboundConnections
+                autoBlock  = [bool]$EnableAutoBlocking
+                connection = @{
+                    retries                 = $ConnectionRetries
+                    userAgentSuffix         = $CustomUserAgent
+                    timeout                 = $ConnectionTimeoutSeconds
+                    enableCircularRedirects = [bool]$EnableCircularRedirects
+                    enableCookies           = [bool]$EnableCookies
+                    useTrustStore           = [bool]$UseNexusTrustStore
+                }
+            }
+        
+        }
+    
+        if ($UseAuthentication) {
                 
-                switch($AuthenticationType){
-                    'Username' {
+            switch ($AuthenticationType) {
+                'Username' {
+                    $authentication = @{
+                        type       = $AuthenticationType.ToLower()
+                        username   = $Credential.UserName
+                        password   = $Credential.GetNetworkCredential().Password
+                        ntlmHost   = ''
+                        ntlmDomain = ''
+                    }
+            
+                    $body.httpClient.Add('authentication', $authentication)
+                }
+    
+                'NTLM' {
+                    if (-not $HostnameFqdn -and $DomainName) {
+                        throw "Parameter HostnameFqdn and DomainName are required when using WindowsNTLM authentication"
+                    }
+                    else {
                         $authentication = @{
-                            type       = $AuthenticationType.ToLower()
+                            type       = $AuthenticationType
                             username   = $Credential.UserName
                             password   = $Credential.GetNetworkCredential().Password
-                            ntlmHost = ''
-                            ntlmDomain = ''
+                            ntlmHost   = $HostnameFqdn
+                            ntlmDomain = $DomainName
                         }
-            
-                        $body.httpClient.Add('authentication', $authentication)
                     }
-    
-                    'NTLM' {
-                        if(-not $HostnameFqdn -and $DomainName){
-                            throw "Parameter HostnameFqdn and DomainName are required when using WindowsNTLM authentication"
-                        } else {
-                            $authentication = @{
-                                type       = $AuthenticationType
-                                username   = $Credential.UserName
-                                password   = $Credential.GetNetworkCredential().Password
-                                ntlmHost   = $HostnameFqdn
-                                ntlmDomain = $DomainName
-                            }
-                        }
            
-                        $body.httpClient.Add('authentication', $authentication)
-                    }
+                    $body.httpClient.Add('authentication', $authentication)
                 }
-                
             }
-    
-            Write-Verbose $($Body | ConvertTo-Json)
-            Invoke-Nexus -UriSlug $urislug -Body $Body -Method POST
-    
+                
         }
+    
+        Write-Verbose $($Body | ConvertTo-Json)
+        Invoke-Nexus -UriSlug $urislug -Body $Body -Method POST
+    
     }
+}

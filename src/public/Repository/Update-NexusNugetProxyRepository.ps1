@@ -42,7 +42,7 @@ Mark the repository as Online. Defaults to True
 .PARAMETER BlobStoreName
 The back-end blob store in which to store cached packages
 
-.PARAMETER StrictContentValidation
+.PARAMETER UseStrictContentValidation
 Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
 
 .PARAMETER DeploymentPolicy
@@ -157,7 +157,7 @@ Update-NexusNugetProxyRepository @ProxyParameters
 
         [Parameter()]
         [switch]
-        $StrictContentValidation,
+        $UseStrictContentValidation,
 
         [Parameter()]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
@@ -249,8 +249,8 @@ Update-NexusNugetProxyRepository @ProxyParameters
                 }
             }
             "StrictContentValidation" {
-                if ($Body.storage.strictContentTypeValidation -ne ([bool]::Parse($StrictContentValidation))) {
-                    $Body.storage.strictContentTypeValidation = [bool]::Parse($StrictContentValidation)
+                if ($Body.storage.strictContentTypeValidation -ne ([bool]::Parse($UseStrictContentValidation))) {
+                    $Body.storage.strictContentTypeValidation = [bool]::Parse($UseStrictContentValidation)
                     $Modified = $true
                 }
             }

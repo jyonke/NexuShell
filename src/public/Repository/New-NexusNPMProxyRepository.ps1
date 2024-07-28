@@ -36,7 +36,11 @@ Mark the repository as Online. Defaults to True
 .PARAMETER BlobStoreName
 The back-end blob store in which to store cached packages
 
+<<<<<<< HEAD
 .PARAMETER UseStrictContentTypeValidation
+=======
+.PARAMETER StrictContentValidation
+>>>>>>> 453cfe2f0cd797dbf728c8aeebfde338b150e6c0
 Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
 
 .PARAMETER DeploymentPolicy
@@ -148,9 +152,14 @@ New-NexusNPMProxyRepository @ProxyParameters
         $BlobStoreName = 'default',
 
         [Parameter()]
+<<<<<<< HEAD
         [Alias('StrictContentValidation')]
         [Switch]
         $UseStrictContentTypeValidation = $true,
+=======
+        [Switch]
+        $StrictContentValidation = $true,
+>>>>>>> 453cfe2f0cd797dbf728c8aeebfde338b150e6c0
 
         [Parameter()]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
@@ -227,7 +236,11 @@ New-NexusNPMProxyRepository @ProxyParameters
             online        = [bool]$Online
             storage       = @{
                 blobStoreName               = $BlobStoreName
+<<<<<<< HEAD
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
+=======
+                strictContentTypeValidation = [bool]$StrictContentValidation
+>>>>>>> 453cfe2f0cd797dbf728c8aeebfde338b150e6c0
                 writePolicy                 = $DeploymentPolicy
             }
             cleanup       = @{

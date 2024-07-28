@@ -28,7 +28,11 @@ function New-NexusRubyGemsGroupRepository {
     Add Content-Disposition header as 'Attachment' to disable some content from being inline in a browser
     
     .EXAMPLE
+<<<<<<< HEAD
     New-NexusRubyGemsGroupRepository -Name RubyGems-group -GroupMembers RubyGemsProxy,MyRubyGemsRepo -DeploymentPolicy Allow
+=======
+    New-NexusRubyGemsGroupRepository -Name R-group -GroupMembers RProxy,MyRRepo -DeploymentPolicy Allow
+>>>>>>> 453cfe2f0cd797dbf728c8aeebfde338b150e6c0
     
     .NOTES
     #>

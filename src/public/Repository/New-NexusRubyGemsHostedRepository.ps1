@@ -18,7 +18,11 @@ function New-NexusRubyGemsHostedRepository {
     .PARAMETER BlobStoreName
     Blob store to use to store R packages
     
+<<<<<<< HEAD
     .PARAMETER UseStrictContentTypeValidation
+=======
+    .PARAMETER StrictContentValidation
+>>>>>>> 453cfe2f0cd797dbf728c8aeebfde338b150e6c0
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
     
     .PARAMETER DeploymentPolicy
@@ -36,7 +40,11 @@ function New-NexusRubyGemsHostedRepository {
         Name = 'MyRubyGemsRepo'
         CleanupPolicy = '90 Days'
         DeploymentPolicy = 'Allow'
+<<<<<<< HEAD
         UseStrictContentTypeValidation = $true
+=======
+        UseStrictContentValidation = $true
+>>>>>>> 453cfe2f0cd797dbf728c8aeebfde338b150e6c0
     }
     
     New-NexusRubyGemsHostedRepository @RepoParams
@@ -62,9 +70,14 @@ function New-NexusRubyGemsHostedRepository {
         $BlobStoreName = 'default',
 
         [Parameter()]
+<<<<<<< HEAD
         [Alias('StrictContentValidation')]
         [Switch]
         $UseStrictContentTypeValidation,
+=======
+        [Switch]
+        $UseStrictContentValidation,
+>>>>>>> 453cfe2f0cd797dbf728c8aeebfde338b150e6c0
 
         [Parameter()]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
@@ -92,7 +105,11 @@ function New-NexusRubyGemsHostedRepository {
             online  = [bool]$Online
             storage = @{
                 blobStoreName               = $BlobStoreName
+<<<<<<< HEAD
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
+=======
+                strictContentTypeValidation = [bool]$UseStrictContentValidation
+>>>>>>> 453cfe2f0cd797dbf728c8aeebfde338b150e6c0
                 writePolicy                 = $DeploymentPolicy
             }
             cleanup = @{

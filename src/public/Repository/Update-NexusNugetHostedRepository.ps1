@@ -54,8 +54,8 @@ function Update-NexusNugetHostedRepository {
         $BlobStore,
 
         [Parameter()]
-        [ValidateSet('True', 'False')]
-        [string]
+        [Alias('StrictContentValidation')]
+        [Switch]
         $UseStrictContentTypeValidation,
 
         [Parameter()]
@@ -92,8 +92,8 @@ function Update-NexusNugetHostedRepository {
                 }
             }
             "UseStrictContentTypeValidation" {
-                if ($Body.storage.strictContentTypeValidation -ne ([bool]::Parse($UseStrictContentTypeValidation))) {
-                    $Body.storage.strictContentTypeValidation = [bool]::Parse($UseStrictContentTypeValidation)
+                if ([bool]$Body.storage.strictContentTypeValidation -ne [bool]$UseStrictContentTypeValidation) {
+                    [bool]$Body.storage.strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
                     $Modified = $true
                 }
             }

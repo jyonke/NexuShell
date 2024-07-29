@@ -75,10 +75,9 @@ function New-NexusMavenHostedRepository {
         $BlobStoreName = 'default',
 
         [Parameter()]
-        [ValidateSet('True', 'False')]
         [Alias('StrictContentValidation')]
-        [String]
-        $UseStrictContentTypeValidation = 'True',
+        [Switch]
+        $UseStrictContentTypeValidation,
 
         [Parameter()]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
@@ -126,7 +125,7 @@ function New-NexusMavenHostedRepository {
             online  = [bool]$Online
             storage = @{
                 blobStoreName               = $BlobStoreName
-                strictContentTypeValidation = $UseStrictContentTypeValidation
+                strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
                 writePolicy                 = $DeploymentPolicy
             }
             cleanup = @{

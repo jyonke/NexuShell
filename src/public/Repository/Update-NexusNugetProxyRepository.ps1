@@ -249,9 +249,9 @@ Update-NexusNugetProxyRepository @ProxyParameters
                     $Modified = $true
                 }
             }
-            "StrictContentValidation" {
-                if ($Body.storage.strictContentTypeValidation -ne ([bool]::Parse($UseStrictContentTypeValidation))) {
-                    $Body.storage.strictContentTypeValidation = [bool]::Parse($UseStrictContentTypeValidation)
+            "UseStrictContentTypeValidation" {
+                if ([bool]$Body.storage.strictContentTypeValidation -ne [bool]$UseStrictContentTypeValidation) {
+                    [bool]$Body.storage.strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
                     $Modified = $true
                 }
             }

@@ -28,7 +28,7 @@ function Update-NexusBowerHostedRepository {
     Indicates if the repository should allow proprietary components
 
     .PARAMETER Force
-    Don't prompt for confirmation before deleting
+    Don't prompt for confirmation before updating
 
     .NOTES
     This does not automatically migrate components from the previous settings.
@@ -38,7 +38,7 @@ function Update-NexusBowerHostedRepository {
         Name = 'MyBowerRepo'
         CleanupPolicy = '30 Days'
         DeploymentPolicy = 'Allow'
-        UseStrictContentTypeValidation = $true
+        UseStrictContentTypeValidation = $false
     }
     
     Update-NexusBowerHostedRepository @RepoParams
@@ -75,7 +75,11 @@ function Update-NexusBowerHostedRepository {
 
         [Parameter()]
         [switch]
-        $HasProprietaryComponents
+        $HasProprietaryComponents,
+
+        [Parameter()]
+        [Switch]
+        $Force
     )
     begin {
         if (-not $header) {
@@ -88,7 +92,7 @@ function Update-NexusBowerHostedRepository {
     end {
         $urislug = "/service/rest/v1/repositories/bower/hosted/$Name"
 
-        $Body = Get-NexusRepositorySettings -Format Bower -Name $Name -Type hosted -ErrorAction 'Stop' | Select-Object -Property * -ExcludeProperty format, type | Convert-ObjectToHashtable
+        $Body = Get-NexusRepositorySettings -Format bower -Name $Name -Type hosted -ErrorAction 'Stop' | Select-Object -Property * -ExcludeProperty format, type | Convert-ObjectToHashtable
 
         $Modified = $false
         switch -Wildcard ($PSBoundParameters.Keys) {

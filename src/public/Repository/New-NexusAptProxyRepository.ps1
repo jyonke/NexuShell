@@ -11,17 +11,11 @@ function New-NexusAptProxyRepository {
     
     .PARAMETER Distribution
     Distribution to fetch e.g. bionic
-    
-    .PARAMETER SigningKey
-    PGP signing key pair (armored private key e.g. gpg --export-secret-key --armor )
-    
-    .PARAMETER SigningKeyPassphrase
-    Passphrase to access PGP Signing Key
-    
+        
     .PARAMETER BlobStore
     Blob store used to store repository contents
     
-    .PARAMETER UseStrictContentValidation
+    .PARAMETER UseStrictContentTypeValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
 
     .PARAMETER DeploymentPolicy
@@ -97,9 +91,8 @@ function New-NexusAptProxyRepository {
     $RepoParams = @{
         Name = 'AptProxy'
         Distribution = 'bionic'
-        SigningKey = 'SuperSecretKey'
         DeploymentPolicy = 'Allow_Once'
-        ProxyUrl = 'https://upstream.deb.com'
+        ProxyRemoteUrl = 'https://upstream.deb.com'
     }
 
     New-NexusAptProxyRepository @RepoParams
@@ -107,7 +100,7 @@ function New-NexusAptProxyRepository {
     .NOTES
     General notes
     #>
-    [CmdletBinding(HelpUri='https://nexushell.dev/New-NexusAptProxyRepository/',DefaultParameterSetName = 'Hosted')]
+    [CmdletBinding(HelpUri = 'https://nexushell.dev/New-NexusAptProxyRepository/', DefaultParameterSetName = 'Hosted')]
     Param(
         [Parameter(Mandatory)]
         [String]
@@ -117,21 +110,14 @@ function New-NexusAptProxyRepository {
         [String]
         $Distribution,
 
-        [Parameter(Mandatory)]
-        [String]
-        $SigningKey,
-
-        [Parameter()]
-        [String]
-        $SigningKeyPassphrase,
-
         [Parameter()]
         [String]
         $BlobStore = 'default',
 
         [Parameter()]
+        [Alias('StrictContentValidation')]
         [Switch]
-        $UseStrictContentValidation,
+        $UseStrictContentTypeValidation,
 
         [Parameter(Mandatory)]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
@@ -246,17 +232,13 @@ function New-NexusAptProxyRepository {
             online        = [bool]$Online
             apt           = @{
                 distribution = $Distribution
-                flat = [bool]$FlatUpstream
-            }
-            aptSigning    = @{
-                keypair    = $SigningKey
-                passprhase = $SigningKeyPassphrase
+                flat         = [bool]$FlatUpstream
             }
             cleanup       = @{
                 policyNames = @($CleanupPolicy )
             }
             storage       = @{
-                strictContentTypeValidation = [bool]$UseStrictContentValidation
+                strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
                 blobStoreName               = $BlobStore
                 writePolicy                 = $($DeploymentPolicy.ToUpper())
             }

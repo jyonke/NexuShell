@@ -27,6 +27,9 @@ function Update-NexusNugetHostedRepository {
     .PARAMETER HasProprietaryComponents
     Indicates if the repository should allow proprietary components
 
+    .PARAMETER Force
+    Don't prompt for confirmation before updating
+
     .NOTES
     This does not automatically migrate components from the previous settings.
 
@@ -65,11 +68,18 @@ function Update-NexusNugetHostedRepository {
 
         [Parameter()]
         [switch]
-        $HasProprietaryComponents
+        $HasProprietaryComponents,
+
+        [Parameter()]
+        [Switch]
+        $Force
     )
     begin {
         if (-not $header) {
             throw "Not connected to Nexus server! Run Connect-NexusServer first."
+        }
+        if ($Force -and -not $Confirm) {
+            $ConfirmPreference = 'None'
         }
     }
     end {

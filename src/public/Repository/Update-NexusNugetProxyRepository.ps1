@@ -87,6 +87,9 @@ Allow cookies to be stored and used
 .PARAMETER CustomUserAgent
 Custom fragment to append to "User-Agent" header in HTTP requests
 
+.PARAMETER Force
+Don't prompt for confirmation before updating
+
 .NOTES
 This does not automatically migrate components from the previous settings.
 
@@ -217,11 +220,18 @@ Update-NexusNugetProxyRepository @ProxyParameters
 
         [Parameter()]
         [string]
-        $CustomUserAgent
+        $CustomUserAgent,
+
+        [Parameter()]
+        [Switch]
+        $Force
     )
     begin {
         if (-not $header) {
             throw "Not connected to Nexus server! Run Connect-NexusServer first."
+        }
+        if ($Force -and -not $Confirm) {
+            $ConfirmPreference = 'None'
         }
     }
     end {

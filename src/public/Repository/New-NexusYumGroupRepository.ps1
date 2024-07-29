@@ -9,6 +9,12 @@ function New-NexusYumGroupRepository {
     .PARAMETER Name
     The name of the repository
     
+    .PARAMETER SigningKey
+    PGP signing key pair (armored private key e.g. gpg --export-secret-key --armor )
+
+    .PARAMETER SigningKeyPassphrase
+    Passphrase to access PGP Signing Key
+    
     .PARAMETER GroupMembers
     The R Repositories to add as group members
     
@@ -26,12 +32,6 @@ function New-NexusYumGroupRepository {
     
     .PARAMETER ContentDisposition
     Add Content-Disposition header as 'Attachment' to disable some content from being inline in a browser
-
-    .PARAMETER KeyPair
-    PGP signing key pair (armored private key e.g. gpg --export-secret-key --armor )
-
-    .PARAMETER Passphrase
-    Passphrase used to create your private key
     
     .EXAMPLE
     New-NexusYumGroupRepository -Name Yum-group -GroupMembers YumProxy,MyYumRepo -DeploymentPolicy Allow
@@ -43,6 +43,14 @@ function New-NexusYumGroupRepository {
         [Parameter(Mandatory)]
         [String]
         $Name,
+
+        [Parameter()]
+        [string]
+        $SigningKey,
+
+        [Parameter()]
+        [string]
+        $SigningKeyPassphrase,
 
         [Parameter(Mandatory)]
         [String[]]
@@ -63,15 +71,7 @@ function New-NexusYumGroupRepository {
         [Parameter(Mandatory)]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
         [String]
-        $DeploymentPolicy = 'Allow_Once',
-
-        [Parameter(ParameterSetName = "YumSigning")]
-        [string]
-        $KeyPair,
-
-        [Parameter(ParameterSetName = "YumSigning")]
-        [string]
-        $Passphrase
+        $DeploymentPolicy = 'Allow_Once'
     )
     begin {
 
@@ -97,8 +97,8 @@ function New-NexusYumGroupRepository {
                 memberNames = $GroupMembers
             }
             yumSigning = @{
-                keypair    = $KeyPair
-                Passphrase = $Passphrase
+                keypair    = $SigningKey
+                passphrase = $SigningKeyPassphrase
             }
         }
         

@@ -9,6 +9,12 @@ Creates a new Yum Proxy Repository
 .PARAMETER Name
 The name to give the repository
 
+.PARAMETER SigningKey
+PGP signing key pair (armored private key e.g. gpg --export-secret-key --armor )
+
+.PARAMETER Passphrase
+Passphrase used to create your private key
+
 .PARAMETER ProxyRemoteUrl
 Location of the remote repository being proxied, e.g. https://api.Yum.org/v3/index.json
 
@@ -36,7 +42,7 @@ Mark the repository as Online. Defaults to True
 .PARAMETER BlobStoreName
 The back-end blob store in which to store cached packages
 
-.PARAMETER StrictContentValidation
+.PARAMETER UseStrictContentTypeValidation
 Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
 
 .PARAMETER DeploymentPolicy
@@ -81,12 +87,6 @@ Allow cookies to be stored and used
 .PARAMETER CustomUserAgent
 Custom fragment to append to "User-Agent" header in HTTP requests
 
-.PARAMETER KeyPair
-PGP signing key pair (armored private key e.g. gpg --export-secret-key --armor )
-
-.PARAMETER Passphrase
-Passphrase used to create your private key
-
 .EXAMPLE
 
 $ProxyParameters = @{
@@ -116,6 +116,14 @@ New-NexusYumProxyRepository @ProxyParameters
         [Parameter(Mandatory)]
         [String]
         $Name,
+
+        [Parameter()]
+        [string]
+        $SigningKey,
+
+        [Parameter()]
+        [string]
+        $SigningKeyPassphrase,
 
         [Parameter(Mandatory)]
         [String]
@@ -155,7 +163,7 @@ New-NexusYumProxyRepository @ProxyParameters
 
         [Parameter()]
         [Switch]
-        $StrictContentValidation = $true,
+        $UseStrictContentTypeValidation = $true,
 
         [Parameter()]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
@@ -214,15 +222,7 @@ New-NexusYumProxyRepository @ProxyParameters
 
         [Parameter()]
         [String]
-        $CustomUserAgent,
-
-        [Parameter(ParameterSetName = "YumSigning")]
-        [string]
-        $KeyPair,
-
-        [Parameter(ParameterSetName = "YumSigning")]
-        [string]
-        $Passphrase
+        $CustomUserAgent
     )
     begin {
 
@@ -240,7 +240,7 @@ New-NexusYumProxyRepository @ProxyParameters
             online        = [bool]$Online
             storage       = @{
                 blobStoreName               = $BlobStoreName
-                strictContentTypeValidation = [bool]$StrictContentValidation
+                strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
                 writePolicy                 = $DeploymentPolicy
             }
             cleanup       = @{
@@ -269,8 +269,8 @@ New-NexusYumProxyRepository @ProxyParameters
                 }
             }
             yumSigning    = @{
-                keypair    = $KeyPair
-                Passphrase = $Passphrase
+                keypair    = $SigningKey
+                passphrase = $SigningKeyPassphrase
             }
 
         }

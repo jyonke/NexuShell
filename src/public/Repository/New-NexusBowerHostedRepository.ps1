@@ -55,19 +55,17 @@ function New-NexusBowerHostedRepository {
         $CleanupPolicy,
 
         [Parameter()]
-        [ValidateSet('True', 'False')]
-        [String]
-        $Online = 'True',
+        [Switch]
+        $Online = $True,
 
         [Parameter()]
         [String]
         $BlobStoreName = 'default',
 
         [Parameter()]
-        [ValidateSet('True', 'False')]
         [Alias('StrictContentValidation')]
-        [String]
-        $UseStrictContentTypeValidation = 'True',
+        [Switch]
+        $UseStrictContentTypeValidation,
 
         [Parameter()]
         [ValidateSet('Allow', 'Deny', 'Allow_Once')]
@@ -92,10 +90,10 @@ function New-NexusBowerHostedRepository {
     process {
         $body = @{
             name    = $Name
-            online  = $Online
+            online  = [bool]$Online
             storage = @{
                 blobStoreName               = $BlobStoreName
-                strictContentTypeValidation = $UseStrictContentTypeValidation
+                strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
                 writePolicy                 = $DeploymentPolicy
             }
             cleanup = @{

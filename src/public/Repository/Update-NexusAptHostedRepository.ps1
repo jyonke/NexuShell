@@ -37,7 +37,7 @@ function Update-NexusAptHostedRepository {
     Indicates if the repository should allow proprietary components
 
     .PARAMETER Force
-    Don't prompt for confirmation before deleting
+    Don't prompt for confirmation before updating
 
     .NOTES
     This does not automatically migrate components from the previous settings.

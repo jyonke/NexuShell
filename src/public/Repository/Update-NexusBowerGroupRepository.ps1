@@ -19,7 +19,7 @@ function Update-NexusBowerGroupRepository {
     Indicates if strict content type validation should be enforced
 
     .PARAMETER Force
-    Don't prompt for confirmation before deleting
+    Don't prompt for confirmation before updating
 
     .NOTES
     This does not automatically migrate components from the previous settings.
@@ -50,7 +50,11 @@ function Update-NexusBowerGroupRepository {
         [Parameter()]
         [Alias('StrictContentValidation')]
         [Switch]
-        $UseStrictContentTypeValidation
+        $UseStrictContentTypeValidation,
+
+        [Parameter()]
+        [Switch]
+        $Force
     )
     begin {
         if (-not $header) {
@@ -63,7 +67,7 @@ function Update-NexusBowerGroupRepository {
     end {
         $urislug = "/service/rest/v1/repositories/bower/group/$Name"
 
-        $Body = Get-NexusRepositorySettings -Format Bower -Name $Name -Type group -ErrorAction 'Stop' | Select-Object -Property * -ExcludeProperty format, type | Convert-ObjectToHashtable
+        $Body = Get-NexusRepositorySettings -Format bower -Name $Name -Type group -ErrorAction 'Stop' | Select-Object -Property * -ExcludeProperty format, type | Convert-ObjectToHashtable
 
         $Modified = $false
         switch -Wildcard ($PSBoundParameters.Keys) {

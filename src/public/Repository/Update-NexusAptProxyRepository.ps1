@@ -88,7 +88,7 @@ Allow cookies to be stored and used
 Custom fragment to append to "User-Agent" header in HTTP requests
 
 .PARAMETER Force
-Don't prompt for confirmation before deleting
+Don't prompt for confirmation before updating
 
 .NOTES
 This does not automatically migrate components from the previous settings.

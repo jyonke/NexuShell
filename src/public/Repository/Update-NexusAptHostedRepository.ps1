@@ -74,7 +74,7 @@ function Update-NexusAptHostedRepository {
         $SigningKeyPassphrase,
 
         [Parameter()]
-        [string]
+        [string[]]
         $CleanupPolicy,
 
         [Parameter()]
@@ -148,10 +148,10 @@ function Update-NexusAptHostedRepository {
                 }
             }
             "CleanupPolicy" {
-                if ($Body.cleanup.policyNames -ne @($CleanupPolicy)) {
-                    $Body.cleanup.policyNames = @($CleanupPolicy)
+                if ($CleanupPolicy) {
+                    $Body.cleanup.policyNames = $CleanupPolicy
                     $Modified = $true
-                }
+                }   
             }
             "HasProprietaryComponents" {
                 if ($Body.component.proprietaryComponents -ne $HasProprietaryComponents.IsPresent) {

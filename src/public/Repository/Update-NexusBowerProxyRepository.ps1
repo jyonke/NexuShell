@@ -131,7 +131,7 @@ Update-NexusBowerProxyRepository @ProxyParameters
         $NegativeCacheTTLMinutes,
 
         [Parameter()]
-        [string]
+        [string[]]
         $CleanupPolicy,
 
         [Parameter()]
@@ -228,7 +228,7 @@ Update-NexusBowerProxyRepository @ProxyParameters
         $Body = Get-NexusRepositorySettings -Format -Name $Name -Type proxy -ErrorAction 'Stop' | Select-Object -Property * -ExcludeProperty format, type | Convert-ObjectToHashtable
         # Remove Authentication as password is never returned via API and always needs redefined if needing updated
         if (($Body.httpClient.authentication -ne $null) -and (-not($UseAuthentication))) {
-            Write-Verbose "Authentication is being removed from body as the API requires it to be defined in each update"
+            Write-Warning "Authentication is being removed from body as the API requires it to be defined in each update"
         }
         $Body.httpClient = $Body.httpClient | Convert-ObjectToHashtable 
         $Body.httpClient.Remove('Authentication')
@@ -284,8 +284,8 @@ Update-NexusBowerProxyRepository @ProxyParameters
                 }
             }
             "CleanupPolicy" {
-                if ($Body.cleanup.policyNames -ne @($CleanupPolicy)) {
-                    $Body.cleanup.policyNames = @($CleanupPolicy)
+                if ($CleanupPolicy) {
+                    $Body.cleanup.policyNames = $CleanupPolicy
                     $Modified = $true
                 }
             }

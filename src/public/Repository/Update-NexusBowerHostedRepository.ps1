@@ -52,7 +52,7 @@ function Update-NexusBowerHostedRepository {
         $Name,
 
         [Parameter()]
-        [string]
+        [string[]]
         $CleanupPolicy,
 
         [Parameter()]
@@ -126,8 +126,8 @@ function Update-NexusBowerHostedRepository {
                 }
             }
             "CleanupPolicy" {
-                if ($Body.cleanup.policyNames -ne @($CleanupPolicy)) {
-                    $Body.cleanup.policyNames = @($CleanupPolicy)
+                if ($CleanupPolicy) {
+                    $Body.cleanup.policyNames = $CleanupPolicy
                     $Modified = $true
                 }
             }

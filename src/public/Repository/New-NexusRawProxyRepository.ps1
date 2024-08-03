@@ -21,9 +21,6 @@ Time before cached content is refreshed. Defaults to 1440
 .PARAMETER MetadataMaxAgeMinutes
 Time before cached metadata is refreshed. Defaults to 1440
 
-.PARAMETER QueryCacheItemMaxAgeSeconds
-Time before the query cache expires. Defaults to 3600
-
 .PARAMETER UseNegativeCache
 Use the built-in Negative Cache feature
 
@@ -132,10 +129,6 @@ New-NexusRawProxyRepository @ProxyParameters
         [Parameter()]
         [String]
         $MetadataMaxAgeMinutes = '1440',
-
-        [Parameter()]
-        [String]
-        $QueryCacheItemMaxAgeSeconds = '3600',
 
         [Parameter()]
         [Switch]

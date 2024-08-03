@@ -18,9 +18,6 @@ Time before cached content is refreshed. Defaults to 1440
 .PARAMETER MetadataMaxAgeMinutes
 Time before cached metadata is refreshed. Defaults to 1440
 
-.PARAMETER QueryCacheItemMaxAgeSeconds
-Time before the query cache expires. Defaults to 3600
-
 .PARAMETER UseNegativeCache
 Use the built-in Negative Cache feature
 
@@ -42,8 +39,6 @@ The back-end blob store in which to store cached packages
 .PARAMETER UseStrictContentTypeValidation
 Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
 
-.PARAMETER DeploymentPolicy
-Controls whether packages can be overwritten
 
 .PARAMETER UseNexusTrustStore
 Use certificates stored in the Nexus truststore to connect to external systems
@@ -95,10 +90,8 @@ $ProxyParameters = @{
     Name = 'ChocoProxy'
     ProxyRemoteUrl = 'https://community.chocolatey.org/api/v2'
     BowerVersion = 'V2'
-    DeploymentPolicy = 'Allow'
     CleanupPolicy = '90_Days'
     UseNegativeCache = $true
-    QueryCacheItemMaxAgeSeconds = '1800'
 }
 
 Update-NexusBowerProxyRepository @ProxyParameters
@@ -150,11 +143,6 @@ Update-NexusBowerProxyRepository @ProxyParameters
         [Alias('StrictContentValidation')]
         [Switch]
         $UseStrictContentTypeValidation,
-
-        [Parameter()]
-        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
-        [string]
-        $DeploymentPolicy,
 
         [Parameter()]
         [switch]
@@ -292,17 +280,6 @@ Update-NexusBowerProxyRepository @ProxyParameters
             "RoutingRule" {
                 if ($Body.routingRule -ne $RoutingRule) {
                     $Body.routingRule = $RoutingRule
-                    $Modified = $true
-                }
-            }
-            "DeploymentPolicy" {
-                $deploymentPolicyMap = @{
-                    "Allow"      = "allow"
-                    "Deny"       = "deny"
-                    "Allow_Once" = "allow_once"
-                }
-                if ($Body.storage.writePolicy -ne $deploymentPolicyMap[$DeploymentPolicy]) {
-                    $Body.storage.writePolicy = $deploymentPolicyMap[$DeploymentPolicy]
                     $Modified = $true
                 }
             }

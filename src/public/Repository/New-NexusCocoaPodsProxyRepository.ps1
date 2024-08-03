@@ -1,16 +1,16 @@
-function New-NexusCocoaPodProxyRepository {
+function New-NexusCocoaPodsProxyRepository {
     <#
     .SYNOPSIS
-    Creates a new CocoaPod Proxy Repository
+    Creates a new CocoaPods Proxy Repository
     
     .DESCRIPTION
-    Creates a new CocoaPod Proxy Repository
+    Creates a new CocoaPods Proxy Repository
     
     .PARAMETER Name
     The name to give the repository
     
     .PARAMETER ProxyRemoteUrl
-    Location of the remote repository being proxied, e.g. https://api.CocoaPod.org/v3/index.json
+    Location of the remote repository being proxied, e.g. https://api.CocoaPods.org/v3/index.json
     
     .PARAMETER ContentMaxAgeMinutes
     Time before cached content is refreshed. Defaults to 1440
@@ -84,18 +84,18 @@ function New-NexusCocoaPodProxyRepository {
     .EXAMPLE
     
     $ProxyParameters = @{
-        Name = 'CocoaPodProxy'
-        ProxyRemoteUrl = 'https://upstream.CocoaPodpkgs.com'
+        Name = 'CocoaPodsProxy'
+        ProxyRemoteUrl = 'https://upstream.CocoaPodspkgs.com'
         DeploymentPolicy = 'Allow'
     }
     
-    New-NexusCocoaPodProxyRepository @ProxyParameters
+    New-NexusCocoaPodsProxyRepository @ProxyParameters
     
     .EXAMPLE
     
     $ProxyParameters = @{
-        Name = 'CocoaPodProxy'
-        ProxyRemoteUrl = 'https://upstream.CocoaPodpkgs.com'
+        Name = 'CocoaPodsProxy'
+        ProxyRemoteUrl = 'https://upstream.CocoaPodspkgs.com'
         DeploymentPolicy = 'Allow'
         UseAuthentication = $true
         AuthenticationType = 'Username'
@@ -103,9 +103,9 @@ function New-NexusCocoaPodProxyRepository {
     
     }
     
-    New-NexusCocoaPodProxyRepository @ProxyParameters
+    New-NexusCocoaPodsProxyRepository @ProxyParameters
     #>
-    [CmdletBinding(HelpUri = 'https://nexushell.dev/New-NexusCocoaPodProxyRepository/', DefaultParameterSetname = "Default")]
+    [CmdletBinding(HelpUri = 'https://nexushell.dev/New-NexusCocoaPodsProxyRepository/', DefaultParameterSetname = "Default")]
     Param(
         [Parameter(Mandatory)]
         [String]

@@ -15,7 +15,7 @@ function Update-NexusNPMGroupRepository {
     .PARAMETER BlobStoreName
     The name of the blob store to use
 
-    .PARAMETER UseStrictContentValidation
+    .PARAMETER UseStrictContentTypeValidation
     Indicates if strict content type validation should be enforced
 
     .PARAMETER Force
@@ -82,9 +82,9 @@ function Update-NexusNPMGroupRepository {
                     $Modified = $true
                 }
             }
-            "UseStrictContentValidation" {
-                if ($Body.storage.strictContentTypeValidation -ne ([bool]::Parse($UseStrictContentValidation))) {
-                    $Body.storage.strictContentTypeValidation = [bool]::Parse($UseStrictContentValidation)
+            "UseStrictContentTypeValidation" {
+                if ($Body.storage.strictContentTypeValidation -ne ([bool]::Parse($UseStrictContentTypeValidation))) {
+                    $Body.storage.strictContentTypeValidation = [bool]::Parse($UseStrictContentTypeValidation)
                     $Modified = $true
                 }
             }

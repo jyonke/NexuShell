@@ -101,7 +101,7 @@ function Update-NexusNPMHostedRepository {
                     $Modified = $true
                 }
             }
-            "UseStrictContentValidation" {
+            "UseStrictContentTypeValidation" {
                 if ($Body.storage.strictContentTypeValidation -ne ([bool]::Parse($UseStrictContentTypeValidation))) {
                     $Body.storage.strictContentTypeValidation = [bool]::Parse($UseStrictContentTypeValidation)
                     $Modified = $true

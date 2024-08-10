@@ -31,13 +31,14 @@ function New-NexusRawHostedRepository {
     Add Content-Disposition header as 'Attachment' to disable some content from being inline in a browser.
     
     .EXAMPLE
-    New-NexusRawHostedRepository -Name BinaryArtifacts -ContentDisposition Attachment
+    New-NexusRawHostedRepository -Name RawHosted -ContentDisposition Attachment
 
     .EXAMPLE
     $RepoParams = @{
         Name = 'BinaryArtifacts'
         Online = $true
         UseStrictContentTypeValidation = $true
+        ContentDisposition = 'Inline'
         DeploymentPolicy = 'Allow'
         CleanupPolicy = '90Days',
         BlobStore = 'AmazonS3Bucket'
@@ -79,7 +80,7 @@ function New-NexusRawHostedRepository {
         $HasProprietaryComponents,
 
         [Parameter(Mandatory)]
-        [ValidateSet('Inline','Attachment')]
+        [ValidateSet('Inline', 'Attachment')]
         [String]
         $ContentDisposition
     )
@@ -97,20 +98,20 @@ function New-NexusRawHostedRepository {
     process {
 
         $Body = @{
-            name = $Name
-            online = [bool]$Online
-            storage = @{
-                blobStoreName = $BlobStore
+            name      = $Name
+            online    = [bool]$Online
+            storage   = @{
+                blobStoreName               = $BlobStore
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
-                writePolicy = $DeploymentPolicy.ToLower()
+                writePolicy                 = $DeploymentPolicy.ToLower()
             }
-            cleanup = @{
+            cleanup   = @{
                 policyNames = @($CleanupPolicy)
             }
             component = @{
                 proprietaryComponents = [bool]$HasProprietaryComponents
             }
-            raw = @{
+            raw       = @{
                 contentDisposition = $ContentDisposition.ToUpper()
             }
         }

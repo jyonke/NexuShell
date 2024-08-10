@@ -42,9 +42,6 @@ The back-end blob store in which to store cached packages
 .PARAMETER UseStrictContentTypeValidation
 Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
 
-.PARAMETER DeploymentPolicy
-Controls whether packages can be overwritten
-
 .PARAMETER UseNexusTrustStore
 Use certificates stored in the Nexus truststore to connect to external systems
 
@@ -87,9 +84,9 @@ Custom fragment to append to "User-Agent" header in HTTP requests
 .EXAMPLE
 
 $ProxyParameters = @{
-    Name = 'ChocoProxy'
-    ProxyRemoteUrl = 'https://community.chocolatey.org/api/v2'
-    DeploymentPolicy = 'Allow'
+    Name = 'RawProxy'
+    ProxyRemoteUrl = 'https://example.com'
+    ContentDisposition = 'Inline'
 }
 
 New-NexusRawProxyRepository @ProxyParameters
@@ -97,9 +94,9 @@ New-NexusRawProxyRepository @ProxyParameters
 .EXAMPLE
 
 $ProxyParameters = @{
-    Name = 'ChocoProxy'
-    ProxyRemoteUrl = 'https://community.chocolatey.org/api/v2'
-    DeploymentPolicy = 'Allow'
+    Name = 'RawProxy'
+    ProxyRemoteUrl = 'https://example.com'
+    ContentDisposition = 'Attachment'
     UseAuthentication = $true
     AuthenticationType = 'Username'
     Credential = (Get-Credential)

@@ -28,11 +28,11 @@ function New-NexusRawGroupRepository {
     Required by the API, but thrown away by the underlying system. Use whatever you want here from the set
     
     .EXAMPLE
-    New-NexusRawGroupRepository -Name AllArtifacts -GroupMembers BinaryArtifacts,Documentation -DeploymentPolicy Allow
+    New-NexusRawGroupRepository -Name RawGroup -GroupMembers RawProxy,RawHosted -DeploymentPolicy Allow -ContentDisposition Attachment
     
     .NOTES
     #>
-    [CmdletBinding(HelpUri='https://nexushell.dev/New-NexusRawGroupRepository/')]
+    [CmdletBinding(HelpUri = 'https://nexushell.dev/New-NexusRawGroupRepository/')]
     Param(
         [Parameter(Mandatory)]
         [String]

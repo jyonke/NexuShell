@@ -55,7 +55,7 @@ function New-NexusRHostedRepository {
 
         [Parameter()]
         [Switch]
-        $Online,
+        $Online = $true,
 
         [Parameter()]
         [String]

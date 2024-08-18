@@ -55,7 +55,7 @@ function New-NexusNPMHostedRepository {
 
         [Parameter()]
         [Switch]
-        $Online,
+        $Online = $true,
 
         [Parameter()]
         [String]

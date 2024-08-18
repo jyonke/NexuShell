@@ -109,7 +109,7 @@ function New-NexusDockerProxyRepository {
 
         [Parameter()]
         [Switch]
-        $Online,
+        $Online = $true,
 
         [Parameter()]
         [String]

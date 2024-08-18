@@ -55,7 +55,7 @@ function New-NexusPyPiHostedRepository {
 
         [Parameter()]
         [Switch]
-        $Online,
+        $Online = $true,
 
         [Parameter()]
         [String]

@@ -62,7 +62,7 @@ function New-NexusYumHostedRepository {
 
         [Parameter()]
         [Switch]
-        $Online,
+        $Online = $true,
 
         [Parameter()]
         [String]

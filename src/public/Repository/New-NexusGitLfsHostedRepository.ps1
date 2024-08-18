@@ -55,7 +55,7 @@ function New-NexusGitlfsHostedRepository {
 
         [Parameter()]
         [Switch]
-        $Online,
+        $Online = $true,
 
         [Parameter()]
         [String]

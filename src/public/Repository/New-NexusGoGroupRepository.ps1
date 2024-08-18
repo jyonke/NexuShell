@@ -38,7 +38,7 @@ function New-NexusGoGroupRepository {
 
         [Parameter()]
         [Switch]
-        $Online,
+        $Online = $true,
 
         [Parameter()]
         [String]

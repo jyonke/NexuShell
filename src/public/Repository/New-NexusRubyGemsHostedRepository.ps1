@@ -55,7 +55,7 @@ function New-NexusRubyGemsHostedRepository {
 
         [Parameter()]
         [Switch]
-        $Online,
+        $Online = $true,
 
         [Parameter()]
         [String]

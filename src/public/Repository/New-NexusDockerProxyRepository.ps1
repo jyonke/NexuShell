@@ -262,7 +262,6 @@ function New-NexusDockerProxyRepository {
             storage       = @{
                 blobStoreName               = $BlobStoreName
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
-                writePolicy                 = $DeploymentPolicy
             }
             cleanup       = @{
                 policyNames = @($CleanupPolicy)

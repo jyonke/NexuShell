@@ -39,9 +39,6 @@ The back-end blob store in which to store cached packages
 .PARAMETER UseStrictContentTypeValidation
 Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
 
-.PARAMETER DeploymentPolicy
-Controls whether packages can be overwritten
-
 .PARAMETER UseNexusTrustStore
 Use certificates stored in the Nexus truststore to connect to external systems
 
@@ -86,7 +83,6 @@ Custom fragment to append to "User-Agent" header in HTTP requests
 $ProxyParameters = @{
     Name = 'PyPiProxy'
     ProxyRemoteUrl = 'https://remote.repository.com'
-    DeploymentPolicy = 'Allow'
 }
 
 New-NexusPyPiProxyRepository @ProxyParameters
@@ -96,7 +92,6 @@ New-NexusPyPiProxyRepository @ProxyParameters
 $ProxyParameters = @{
     Name = 'PyPiProxy'
     ProxyRemoteUrl = 'https://remote.repository.com'
-    DeploymentPolicy = 'Allow'
     UseAuthentication = $true
     AuthenticationType = 'Username'
     Credential = (Get-Credential)
@@ -152,12 +147,7 @@ New-NexusPyPiProxyRepository @ProxyParameters
         [Switch]
         $UseStrictContentTypeValidation = $true,
 
-        [Parameter()]
-        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
-        [String]
-        $DeploymentPolicy,
-
-        [Parameter()]
+[Parameter()]
         [Switch]
         $UseNexusTrustStore = $false,
 
@@ -228,7 +218,6 @@ New-NexusPyPiProxyRepository @ProxyParameters
             storage       = @{
                 blobStoreName               = $BlobStoreName
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
-                writePolicy                 = $DeploymentPolicy
             }
             cleanup       = @{
                 policyNames = @($CleanupPolicy)

@@ -41,7 +41,6 @@ The back-end blob store in which to store cached packages
 
 .PARAMETER UseStrictContentTypeValidation
 Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
-
 .PARAMETER UseNexusTrustStore
 Use certificates stored in the Nexus truststore to connect to external systems
 

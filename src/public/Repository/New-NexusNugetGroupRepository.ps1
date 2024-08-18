@@ -24,11 +24,9 @@ function New-NexusNugetGroupRepository {
     .PARAMETER ContentDisposition
     Add Content-Disposition header as 'Attachment' to disable some content from being inline in a browser
     
-    .PARAMETER DeploymentPolicy
-    Required by the API, but thrown away by the underlying system. Use whatever you want here from the set
     
     .EXAMPLE
-    New-NexusNuGetGroupRepository -Name AllArtifacts -GroupMembers BinaryArtifacts,Documentation -DeploymentPolicy Allow
+    New-NexusNuGetGroupRepository -Name AllArtifacts -GroupMembers BinaryArtifacts,Documentation
     
     .NOTES
     #>

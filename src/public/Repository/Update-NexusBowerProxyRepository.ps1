@@ -213,7 +213,7 @@ Update-NexusBowerProxyRepository @ProxyParameters
     end {
         $urislug = "/service/rest/v1/repositories/bower/proxy/$Name"
 
-        $Body = Get-NexusRepositorySettings -Format -Name $Name -Type proxy -ErrorAction 'Stop' | Select-Object -Property * -ExcludeProperty format, type | Convert-ObjectToHashtable
+        $Body = Get-NexusRepositorySettings -Format bower -Name $Name -Type proxy -ErrorAction 'Stop' | Select-Object -Property * -ExcludeProperty format, type | Convert-ObjectToHashtable
         # Remove Authentication as password is never returned via API and always needs redefined if needing updated
         if (($Body.httpClient.authentication -ne $null) -and (-not($UseAuthentication))) {
             Write-Warning "Authentication is being removed from body as the API requires it to be defined in each update"

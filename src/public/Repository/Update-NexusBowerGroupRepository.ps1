@@ -25,7 +25,7 @@ function Update-NexusBowerGroupRepository {
     This does not automatically migrate components from the previous settings.
 
     .EXAMPLE
-    Update-NexusBowerGroupRepository -Name MyBowerGroup -GroupMembers MyBowerRepo -DeploymentPolicy Allow
+    Update-NexusBowerGroupRepository -Name MyBowerGroup -GroupMembers MyBowerRepo
 
     # Updates the specified Bower group repository with the provided parameters
     #>

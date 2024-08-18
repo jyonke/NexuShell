@@ -39,9 +39,6 @@ The back-end blob store in which to store cached packages
 .PARAMETER UseStrictContentTypeValidation
 Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
 
-.PARAMETER DeploymentPolicy
-Controls whether packages can be overwritten
-
 .PARAMETER UseNexusTrustStore
 Use certificates stored in the Nexus truststore to connect to external systems
 
@@ -86,7 +83,6 @@ Custom fragment to append to "User-Agent" header in HTTP requests
 $ProxyParameters = @{
     Name = 'ConanProxy'
     ProxyRemoteUrl = 'https://upstream.Conanpkgs.com'
-    DeploymentPolicy = 'Allow'
 }
 
 New-NexusConanProxyRepository @ProxyParameters
@@ -96,7 +92,6 @@ New-NexusConanProxyRepository @ProxyParameters
 $ProxyParameters = @{
     Name = 'ConanProxy'
     ProxyRemoteUrl = 'https://upstream.Conanpkgs.com'
-    DeploymentPolicy = 'Allow'
     UseAuthentication = $true
     AuthenticationType = 'Username'
     Credential = (Get-Credential)
@@ -151,11 +146,6 @@ New-NexusConanProxyRepository @ProxyParameters
         [Alias('StrictContentValidation')]
         [Switch]
         $UseStrictContentTypeValidation = $true,
-
-        [Parameter()]
-        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
-        [String]
-        $DeploymentPolicy,
 
         [Parameter()]
         [Switch]
@@ -228,7 +218,6 @@ New-NexusConanProxyRepository @ProxyParameters
             storage       = @{
                 blobStoreName               = $BlobStoreName
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
-                writePolicy                 = $DeploymentPolicy
             }
             cleanup       = @{
                 policyNames = @($CleanupPolicy)

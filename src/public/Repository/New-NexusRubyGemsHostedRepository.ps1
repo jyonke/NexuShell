@@ -67,9 +67,9 @@ function New-NexusRubyGemsHostedRepository {
         $UseStrictContentTypeValidation,
 
         [Parameter()]
-        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
+        [ValidateSet('Allow', 'Deny', 'Allow_Once', 'Replication_Only')]
         [String]
-        $DeploymentPolicy,
+        $DeploymentPolicy = 'Allow_Once',
 
         [Parameter()]
         [Switch]
@@ -93,7 +93,7 @@ function New-NexusRubyGemsHostedRepository {
             storage = @{
                 blobStoreName               = $BlobStoreName
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
-                writePolicy                 = $DeploymentPolicy
+                writePolicy                 = $($DeploymentPolicy.ToUpper())
             }
             cleanup = @{
                 policyNames = @($CleanupPolicy)

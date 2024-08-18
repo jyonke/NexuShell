@@ -69,9 +69,9 @@ function Update-NexusBowerHostedRepository {
         $UseStrictContentTypeValidation,
 
         [Parameter()]
-        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
-        [string]
-        $DeploymentPolicy,
+        [ValidateSet('Allow', 'Deny', 'Allow_Once', 'Replication_Only')]
+        [String]
+        $DeploymentPolicy = 'Allow_Once',
 
         [Parameter()]
         [switch]
@@ -116,9 +116,10 @@ function Update-NexusBowerHostedRepository {
             }
             "DeploymentPolicy" {
                 $deploymentPolicyMap = @{
-                    "Allow"      = "allow"
-                    "Deny"       = "deny"
-                    "Allow_Once" = "allow_once"
+                    "Allow"            = "ALLOW"
+                    "Deny"             = "DENY"
+                    "Allow_Once"       = "ALLOW_ONCE"
+                    "Replication_Only" = "REPLICATION_ONLY"
                 }
                 if ($Body.storage.writePolicy -ne $deploymentPolicyMap[$DeploymentPolicy]) {
                     $Body.storage.writePolicy = $deploymentPolicyMap[$DeploymentPolicy]

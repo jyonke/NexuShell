@@ -24,11 +24,9 @@ function New-NexusBowerGroupRepository {
     .PARAMETER ContentDisposition
     Add Content-Disposition header as 'Attachment' to disable some content from being inline in a browser
     
-    .PARAMETER DeploymentPolicy
-    Required by the API, but thrown away by the underlying system. Use whatever you want here from the set
     
     .EXAMPLE
-    New-NexusBowerGroupRepository -Name AllArtifacts -GroupMembers BinaryArtifacts,Documentation -DeploymentPolicy Allow
+    New-NexusBowerGroupRepository -Name AllArtifacts -GroupMembers BinaryArtifacts,Documentation
     
     .NOTES
     #>
@@ -52,12 +50,7 @@ function New-NexusBowerGroupRepository {
 
         [Parameter()]
         [Switch]
-        $UseStrictContentTypeValidation,
-
-        [Parameter(Mandatory)]
-        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
-        [String]
-        $DeploymentPolicy = 'Allow_Once'
+        $UseStrictContentTypeValidation
     )
     begin {
 
@@ -77,7 +70,6 @@ function New-NexusBowerGroupRepository {
             storage = @{
                 blobStoreName               = $BlobStore
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
-                writePolicy                 = $DeploymentPolicy.ToLower()
             }
             group   = @{
                 memberNames = $GroupMembers

@@ -24,11 +24,9 @@ function New-NexusRawGroupRepository {
     .PARAMETER ContentDisposition
     Add Content-Disposition header as 'Attachment' to disable some content from being inline in a browser
     
-    .PARAMETER DeploymentPolicy
-    Required by the API, but thrown away by the underlying system. Use whatever you want here from the set
     
     .EXAMPLE
-    New-NexusRawGroupRepository -Name RawGroup -GroupMembers RawProxy,RawHosted -DeploymentPolicy Allow -ContentDisposition Attachment
+    New-NexusRawGroupRepository -Name RawGroup -GroupMembers RawProxy,RawHosted -ContentDisposition Attachment
     
     .NOTES
     #>
@@ -57,12 +55,7 @@ function New-NexusRawGroupRepository {
         [Parameter(Mandatory)]
         [ValidateSet('Inline', 'Attachment')]
         [String]
-        $ContentDisposition,
-
-        [Parameter(Mandatory)]
-        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
-        [String]
-        $DeploymentPolicy = 'Allow_Once'
+        $ContentDisposition
     )
     begin {
 
@@ -82,7 +75,6 @@ function New-NexusRawGroupRepository {
             storage = @{
                 blobStoreName               = $BlobStore
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
-                writePolicy                 = $DeploymentPolicy.ToLower()
             }
             group   = @{
                 memberNames = $GroupMembers

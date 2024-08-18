@@ -92,7 +92,6 @@ This does not automatically migrate components from the previous settings.
 $RepoParams = @{
     Name = 'AptProxy'
     Distribution = 'bookworm'
-    DeploymentPolicy = 'Allow_Once'
     ProxyRemoteUrl = 'https://upstream.deb.com'
 }
 

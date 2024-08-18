@@ -17,9 +17,6 @@ function New-NexusAptProxyRepository {
     
     .PARAMETER UseStrictContentTypeValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
-
-    .PARAMETER DeploymentPolicy
-    Controls if deployments of and updates to artifacts are allowed
     
     .PARAMETER CleanupPolicy
     Components that match any of the Applied policies will be deleted
@@ -91,7 +88,6 @@ function New-NexusAptProxyRepository {
     $RepoParams = @{
         Name = 'AptProxy'
         Distribution = 'bionic'
-        DeploymentPolicy = 'Allow_Once'
         ProxyRemoteUrl = 'https://upstream.deb.com'
     }
 
@@ -118,11 +114,6 @@ function New-NexusAptProxyRepository {
         [Alias('StrictContentValidation')]
         [Switch]
         $UseStrictContentTypeValidation,
-
-        [Parameter(Mandatory)]
-        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
-        [String]
-        $DeploymentPolicy,
 
         [Parameter()]
         [String]
@@ -240,7 +231,6 @@ function New-NexusAptProxyRepository {
             storage       = @{
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
                 blobStoreName               = $BlobStore
-                writePolicy                 = $($DeploymentPolicy.ToUpper())
             }
             proxy         = @{
                 remoteUrl      = $ProxyRemoteUrl

@@ -27,14 +27,12 @@ function New-NexusYumGroupRepository {
     .PARAMETER UseStrictContentTypeValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
 
-    .PARAMETER DeploymentPolicy
-    Required by the API, but thrown away by the underlying system. Use whatever you want here from the set
     
     .PARAMETER ContentDisposition
     Add Content-Disposition header as 'Attachment' to disable some content from being inline in a browser
     
     .EXAMPLE
-    New-NexusYumGroupRepository -Name Yum-group -GroupMembers YumProxy,MyYumRepo -DeploymentPolicy Allow
+    New-NexusYumGroupRepository -Name Yum-group -GroupMembers YumProxy,MyYumRepo
     
     .NOTES
     #>
@@ -66,12 +64,7 @@ function New-NexusYumGroupRepository {
 
         [Parameter()]
         [Switch]
-        $UseStrictContentTypeValidation,
-
-        [Parameter(Mandatory)]
-        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
-        [String]
-        $DeploymentPolicy = 'Allow_Once'
+        $UseStrictContentTypeValidation
     )
     begin {
 
@@ -91,7 +84,6 @@ function New-NexusYumGroupRepository {
             storage    = @{
                 blobStoreName               = $BlobStore
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
-                writePolicy                 = $DeploymentPolicy.ToLower()
             }
             group      = @{
                 memberNames = $GroupMembers

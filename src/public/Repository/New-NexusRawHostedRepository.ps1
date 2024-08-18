@@ -67,7 +67,7 @@ function New-NexusRawHostedRepository {
         $UseStrictContentTypeValidation,
 
         [Parameter()]
-        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
+        [ValidateSet('Allow', 'Deny', 'Allow_Once', 'Replication_Only')]
         [String]
         $DeploymentPolicy = 'Allow_Once',
 
@@ -103,7 +103,7 @@ function New-NexusRawHostedRepository {
             storage   = @{
                 blobStoreName               = $BlobStore
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
-                writePolicy                 = $DeploymentPolicy.ToLower()
+                writePolicy                 = $($DeploymentPolicy.ToUpper()).ToLower()
             }
             cleanup   = @{
                 policyNames = @($CleanupPolicy)

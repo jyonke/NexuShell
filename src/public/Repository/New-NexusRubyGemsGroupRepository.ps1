@@ -21,17 +21,15 @@ function New-NexusRubyGemsGroupRepository {
     .PARAMETER UseStrictContentTypeValidation
     Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
 
-    .PARAMETER DeploymentPolicy
-    Required by the API, but thrown away by the underlying system. Use whatever you want here from the set
     
     .PARAMETER ContentDisposition
     Add Content-Disposition header as 'Attachment' to disable some content from being inline in a browser
     
     .EXAMPLE
 <<<<<<< HEAD
-    New-NexusRubyGemsGroupRepository -Name RubyGems-group -GroupMembers RubyGemsProxy,MyRubyGemsRepo -DeploymentPolicy Allow
+    New-NexusRubyGemsGroupRepository -Name RubyGems-group -GroupMembers RubyGemsProxy,MyRubyGemsRepo
 =======
-    New-NexusRubyGemsGroupRepository -Name R-group -GroupMembers RProxy,MyRRepo -DeploymentPolicy Allow
+    New-NexusRubyGemsGroupRepository -Name R-group -GroupMembers RProxy,MyRRepo
 >>>>>>> 453cfe2f0cd797dbf728c8aeebfde338b150e6c0
     
     .NOTES
@@ -56,12 +54,7 @@ function New-NexusRubyGemsGroupRepository {
 
         [Parameter()]
         [Switch]
-        $UseStrictContentTypeValidation,
-
-        [Parameter(Mandatory)]
-        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
-        [String]
-        $DeploymentPolicy = 'Allow_Once'
+        $UseStrictContentTypeValidation
     )
     begin {
 
@@ -81,7 +74,6 @@ function New-NexusRubyGemsGroupRepository {
             storage = @{
                 blobStoreName               = $BlobStore
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
-                writePolicy                 = $DeploymentPolicy.ToLower()
             }
             group   = @{
                 memberNames = $GroupMembers

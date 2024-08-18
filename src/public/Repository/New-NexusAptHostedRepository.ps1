@@ -74,10 +74,10 @@ function New-NexusAptHostedRepository {
         [Switch]
         $UseStrictContentTypeValidation,
 
-        [Parameter(Mandatory)]
-        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
+        [Parameter()]
+        [ValidateSet('Allow', 'Deny', 'Allow_Once', 'Replication_Only')]
         [String]
-        $DeploymentPolicy,
+        $DeploymentPolicy = 'Allow_Once',
 
         [Parameter()]
         [String]
@@ -116,7 +116,7 @@ function New-NexusAptHostedRepository {
             storage    = @{
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
                 blobStoreName               = $BlobStore
-                writePolicy                 = $DeploymentPolicy.ToUpper()
+                writePolicy                 = $($DeploymentPolicy.ToUpper())
             }
             component  = @{
                 proprietaryComponents = [bool]$HasProprietaryComponents

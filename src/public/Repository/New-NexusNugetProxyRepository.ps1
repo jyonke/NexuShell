@@ -45,9 +45,6 @@ The back-end blob store in which to store cached packages
 .PARAMETER UseStrictContentTypeValidation
 Validate that all content uploaded to this repository is of a MIME type appropriate for the repository format
 
-.PARAMETER DeploymentPolicy
-Controls whether packages can be overwritten
-
 .PARAMETER UseNexusTrustStore
 Use certificates stored in the Nexus truststore to connect to external systems
 
@@ -93,7 +90,6 @@ $ProxyParameters = @{
     Name = 'ChocoProxy'
     ProxyRemoteUrl = 'https://community.chocolatey.org/api/v2'
     NugetVersion = 'V2'
-    DeploymentPolicy = 'Allow'
 
 }
 
@@ -105,7 +101,6 @@ $ProxyParameters = @{
     Name = 'ChocoProxy'
     ProxyRemoteUrl = 'https://community.chocolatey.org/api/v2'
     NugetVersion = 'V2'
-    DeploymentPolicy = 'Allow'
     UseAuthentication = $true
     AuthenticationType = 'Username'
     Credential = (Get-Credential)
@@ -170,12 +165,7 @@ New-NexusNugetProxyRepository @ProxyParameters
         [Switch]
         $UseStrictContentTypeValidation = $true,
 
-        [Parameter()]
-        [ValidateSet('Allow', 'Deny', 'Allow_Once')]
-        [String]
-        $DeploymentPolicy,
-
-        [Parameter()]
+[Parameter()]
         [Switch]
         $UseNexusTrustStore = $false,
 
@@ -249,7 +239,6 @@ New-NexusNugetProxyRepository @ProxyParameters
             storage       = @{
                 blobStoreName               = $BlobStoreName
                 strictContentTypeValidation = [bool]$UseStrictContentTypeValidation
-                writePolicy                 = $DeploymentPolicy
             }
             cleanup       = @{
                 policyNames = @($CleanupPolicy)
